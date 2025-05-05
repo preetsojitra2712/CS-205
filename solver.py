@@ -18,3 +18,21 @@ class PuzzleNode:
 
     def f(self):
         return self.g + self.h
+
+def get_neighbors(state):
+    zero = state.index(0)
+    row, col = divmod(zero, 3)
+    out = []
+    if row > 0:
+        lst = list(state); lst[zero], lst[zero-3] = lst[zero-3], lst[zero]
+        out.append(('Up', tuple(lst)))
+    if row < 2:
+        lst = list(state); lst[zero], lst[zero+3] = lst[zero+3], lst[zero]
+        out.append(('Down', tuple(lst)))
+    if col > 0:
+        lst = list(state); lst[zero], lst[zero-1] = lst[zero-1], lst[zero]
+        out.append(('Left', tuple(lst)))
+    if col < 2:
+        lst = list(state); lst[zero], lst[zero+1] = lst[zero+1], lst[zero]
+        out.append(('Right', tuple(lst)))
+    return out
