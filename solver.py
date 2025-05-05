@@ -20,3 +20,22 @@ GOAL_STATE = (
     7, 8, 0
 )
 
+# Node class for search tree
+class PuzzleNode:
+    """
+    state: flat tuple
+    parent: PuzzleNode
+    move: str that generated this node
+    g: path cost
+    h: heuristic cost
+    """
+    def __init__(self, state, parent=None, move=None, g=0):
+        self.state = state
+        self.parent = parent
+        self.move = move
+        self.g = g
+        self.h = 0
+
+    def f(self):
+        # Total cost f = g + h.
+        return self.g + self.h
