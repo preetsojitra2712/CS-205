@@ -1,18 +1,7 @@
-#!/usr/bin/env python3
-"""
-eight_puzzle.py
-
-Solve the 8-puzzle with Uniform-Cost Search and A* (misplaced-tile & manhattan).
-Follows the general-search pseudocode.
-"""
-
 import numpy as np
 
 class Node:
-    """
-    A single state in the search tree.
-    Holds board configuration, pointer to parent, depth, and cost metrics.
-    """
+
     def __init__(self, board):
         self.board = board.copy()
         self.parent = None
