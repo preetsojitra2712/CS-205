@@ -39,3 +39,32 @@ class PuzzleNode:
     def f(self):
         # Total cost f = g + h.
         return self.g + self.h
+
+# Successor function: valid slides of the blank
+def get_neighbors(state):
+    zero = state.index(0)
+    row, col = divmod(zero, 3)
+    neighbors = []
+
+    if row > 0:
+        lst = list(state)
+        lst[zero], lst[zero-3] = lst[zero-3], lst[zero]
+        neighbors.append(('Up', tuple(lst)))
+
+    if row < 2:
+        lst = list(state)
+        lst[zero], lst[zero+3] = lst[zero+3], lst[zero]
+        neighbors.append(('Down', tuple(lst)))
+
+    if col > 0:
+        lst = list(state)
+        lst[zero], lst[zero-1] = lst[zero-1], lst[zero]
+        neighbors.append(('Left', tuple(lst)))
+
+    if col < 2:
+        lst = list(state)
+        lst[zero], lst[zero+1] = lst[zero+1], lst[zero]
+        neighbors.append(('Right', tuple(lst)))
+
+    return neighbors
+
