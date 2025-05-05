@@ -39,4 +39,42 @@ START_D24 = np.array([[0,7,2],
 GOAL_STATE = np.array([[1,2,3],
                        [4,5,6],
                        [7,8,0]])
+class PuzzleNode:
+    """
+    A node in the search tree, wrapping a puzzle configuration.
+    """
+    def __init__(self, config):
+        self.config       = config
+        self.parent       = None
+        self.depth        = 0
+        self.expand_count = 0
+        self.max_frontier = 0
+        self.score        = 0  # g + h
+
+    def is_goal(self):
+        return np.array_equal(self.config, GOAL_STATE)
+
+    def successors(self):
+        # locate blank (0)
+        size = len(self.config)
+        x, y = next((i,j)
+                    for i in range(size)
+                    for j in range(size)
+                    if self.config[i][j]==0)
+
+        # helper to swap blank with neighbor
+        def swap(a,b,c,d):
+            new = self.config.copy()
+            new[a][b], new[c][d] = new[c][d], new[a][b]
+            return new
+
+        moves = [(x+1,y),(x-1,y),(x,y+1),(x,y-1)]
+        children = []
+        for nx,ny in moves:
+            if 0 <= nx < size and 0 <= ny < size:
+                child = PuzzleNode(swap(x,y,nx,ny))
+                child.parent = self
+                child.depth  = self.depth + 1
+                children.append(child)
+        return children
 
