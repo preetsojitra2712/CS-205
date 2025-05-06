@@ -87,3 +87,47 @@ def h_manhattan(state):
         dist += abs(i//3 - gi//3) + abs(i%3 - gi%3)
     return dist
 
+# General search: UCS or A* depending on heuristic argument
+
+def general_search(start, heuristic=None):
+    root = PuzzleNode(start, g=0)
+    if start == GOAL_STATE:
+        return root, 0, 1
+
+    frontier = []
+    tie = 0
+    heapq.heappush(frontier, (root.f(), tie, root))
+    in_frontier = {start}
+    explored = set()
+    nodes_expanded = 0
+    max_frontier = 1
+
+    while frontier:
+        _, _, current = heapq.heappop(frontier)
+        in_frontier.remove(current.state)
+
+        if current.state == GOAL_STATE:
+            return current, nodes_expanded, max_frontier
+
+        explored.add(current.state)
+        nodes_expanded += 1
+
+        for move, succ in get_neighbors(current.state):
+            if succ in explored:
+                continue
+            child = PuzzleNode(succ, parent=current, move=move, g=current.g+1)
+            if heuristic == 'misplaced':
+                child.h = h_misplaced(succ)
+            elif heuristic == 'manhattan':
+                child.h = h_manhattan(succ)
+            else:
+                child.h = 0
+
+            if succ not in in_frontier:
+                tie += 1
+                heapq.heappush(frontier, (child.f(), tie, child))
+                in_frontier.add(succ)
+                max_frontier = max(max_frontier, len(frontier))
+
+    return None, nodes_expanded, max_frontier
+
