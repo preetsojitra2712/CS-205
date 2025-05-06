@@ -68,3 +68,22 @@ def get_neighbors(state):
 
     return neighbors
 
+
+
+# Heuristics for A*
+
+
+def h_misplaced(state):
+    """Count of tiles not in goal position (excludes blank)."""
+    return sum(1 for i, t in enumerate(state)
+               if t != 0 and t != GOAL_STATE[i])
+
+def h_manhattan(state):
+    """Sum of Manhattan distances of tiles to their goal positions."""
+    dist = 0
+    for i, t in enumerate(state):
+        if t == 0: continue
+        gi = GOAL_STATE.index(t)
+        dist += abs(i//3 - gi//3) + abs(i%3 - gi%3)
+    return dist
+
