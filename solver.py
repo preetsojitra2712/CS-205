@@ -155,3 +155,54 @@ def print_solution(path):
         for r in range(3):
             print(" ", node.state[3*r : 3*r+3])
 
+# Main: user interaction & invoking search
+
+
+def main():
+    print("Eight-Puzzle Solver")
+    print(" 1) Default puzzle")
+    print(" 2) Enter your own")
+    choice = input("> ").strip()
+
+    if choice == '1':
+        start = (8, 6, 7, 2, 5, 4, 3, 0, 1)
+    elif choice == '2':
+        start = read_custom_state()
+    else:
+        print("Invalid choice."); sys.exit(1)
+
+    print("\nSelect algorithm:")
+    print("  1) UCS")
+    print("  2) A* Misplaced-Tile")
+    print("  3) A* Manhattan")
+    algo = input("> ").strip()
+
+    if algo == '1':
+        heur = None
+    elif algo == '2':
+        heur = 'misplaced'
+    elif algo == '3':
+        heur = 'manhattan'
+    else:
+        print("Invalid selection."); sys.exit(1)
+
+    t0 = time.time()
+    goal_node, expanded, max_q = general_search(start, heuristic=heur)
+    t1 = time.time()
+
+    if goal_node:
+        path = reconstruct_path(goal_node)
+        print_solution(path)
+        print(f"\nDepth: {len(path)-1}")
+        print(f"Cost: {goal_node.g}")
+        print(f"Expanded: {expanded}")
+        print(f"Max frontier: {max_q}")
+    else:
+        print("No solution found.")
+
+    print(f"Elapsed time: {(t1-t0)*1000:.1f} ms")
+
+
+if __name__ == "__main__":
+    main()
+
