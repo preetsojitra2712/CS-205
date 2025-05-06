@@ -131,3 +131,27 @@ def general_search(start, heuristic=None):
 
     return None, nodes_expanded, max_frontier
 
+# Helpers: reconstruct path, read input, and print solution
+
+
+def reconstruct_path(goal_node):
+    path, n = [], goal_node
+    while n:
+        path.append(n)
+        n = n.parent
+    return list(reversed(path))
+
+def read_custom_state():
+    print("Enter your puzzle (0 = blank):")
+    vals = []
+    for r in range(3):
+        row = input(f" Row {r+1}: ").split()
+        vals.extend(int(x) for x in row)
+    return tuple(vals)
+
+def print_solution(path):
+    for i, node in enumerate(path):
+        print(f"\nStep {i}: {node.move or 'Start'}")
+        for r in range(3):
+            print(" ", node.state[3*r : 3*r+3])
+
